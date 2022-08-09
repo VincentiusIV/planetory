@@ -39,6 +39,7 @@ public abstract class BuildHandler
 public class Builder : Singleton<Builder>
 {
     public BuildResource[] resources;
+    public PreviewNode previewNodePrefab;
 
     private BuildHandler activeBuildHandler;
 

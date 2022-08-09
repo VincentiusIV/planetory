@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+[CreateAssetMenu(menuName = "Factory/Item")]
+public class Item : ScriptableObject
 {
-
+    public Sprite Icon;
 }

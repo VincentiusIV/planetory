@@ -17,21 +17,15 @@ public interface IOutput
 public class Node : MonoBehaviour
 {
     public bool IsInPreviewMode { get; private set; }
-    public UnityEvent OnOfferingItem;
-    
+
     private Node[] subnodes;
-    private SpriteRenderer spriteRenderer;
-    private Color originalColor;
-    private int originalSortingOrder;
+    private PreviewNode previewNode;
 
     protected virtual void Awake()
     {
         List<Node> nodes = new List<Node>(GetComponentsInChildren<Node>());
         nodes.Remove(this);
         subnodes = nodes.ToArray();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        originalColor = spriteRenderer.color;
-        originalSortingOrder = spriteRenderer.sortingOrder;
     }
 
     public virtual BuildHandler CreateBuildHandler(BuildResource resource)
@@ -54,7 +48,8 @@ public class Node : MonoBehaviour
     public void EnterPreviewMode()
     {
         IsInPreviewMode = true;
-        spriteRenderer.sortingOrder = 100;
+        previewNode = Instantiate(Builder.Instance.previewNodePrefab, transform);
+        previewNode.Track(this);
         foreach (var subnode in subnodes)
             subnode.EnterPreviewMode();
     }
@@ -62,18 +57,9 @@ public class Node : MonoBehaviour
     public void ExitPreviewMode()
     {
         IsInPreviewMode = false;
-        spriteRenderer.color = originalColor;
-        spriteRenderer.sortingOrder = originalSortingOrder;
+        Destroy(previewNode.gameObject);
         foreach (var subnode in subnodes)
             subnode.ExitPreviewMode();
-    }
-
-    private void Update()
-    {
-        if (IsInPreviewMode)
-        {
-            spriteRenderer.color = CanBePlaced() ? Color.green : Color.red;
-        }
     }
 
     public bool CanWholeNodeBePlaced()
