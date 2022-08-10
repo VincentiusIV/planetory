@@ -33,6 +33,11 @@ public class Node : MonoBehaviour
         return new SingleBuildHandler(resource);
     }
 
+    public virtual bool CanBeCombinedWith(Node node)
+    {
+        return false;
+    }
+
     public bool Place()
     {
         if (!CanWholeNodeBePlaced())
@@ -74,7 +79,7 @@ public class Node : MonoBehaviour
     {
         NodeSlot slot = NodeGrid.Instance.GetSlot(transform.position);
         if (slot != null)
-            return !slot.IsFilled;
+            return !slot.HasNodes;
         else
             return false;
     }

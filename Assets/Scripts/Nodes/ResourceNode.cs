@@ -1,20 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ResourceNode : Node, IOutput
 {
+    public float timeBetweenSpawn = 1.0f;
+
     public Item outputItem;
     public RailCart cartPrefab;
     public RailNode outputRail;
+    public TMP_Text itemNameField;
+    public MeshRenderer itemIconRenderer;
 
-    private void Start()
+    private float nextCartSpawnTimer;
+
+    protected override void Awake()
     {
+        base.Awake();
+        Debug.Assert(outputItem != null);
         NodeGrid.Instance.PlaceNode(outputRail);
     }
 
-    private void Update()
+    private void Start()
     {
+        itemNameField.text = outputItem.name;
+        itemIconRenderer.material.SetTexture("_BaseMap", outputItem.Icon);
+    }
 
+    private void FixedUpdate()
+    {
+        if(!outputRail.HasCart)
+        {
+            nextCartSpawnTimer -= Time.fixedDeltaTime;
+
+            if (nextCartSpawnTimer <= 0.0f)
+            {
+                RailCart newCart = outputRail.SpawnCart(cartPrefab);
+                newCart.SetItem(outputItem);
+                outputRail.OnCartEnter(newCart);
+                nextCartSpawnTimer = timeBetweenSpawn;
+            }
+        }
+    }
+
+    private void OnValidate()
+    {
+        if(outputItem != null && itemNameField != null)
+        {
+            itemNameField.text = outputItem.name;
+        }
     }
 }

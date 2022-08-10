@@ -29,6 +29,7 @@ public class PreviewNode : MonoBehaviour
         {
             materialInstance.color = targetNode.CanBePlaced() ? validColor : invalidColor;
             meshRenderer.material = materialInstance;
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, Vector3.up);
         }
     }
 }

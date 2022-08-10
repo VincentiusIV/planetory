@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
+  m_Name: Steam
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 2800000, guid: ed69e95c17ac46747b8b3fd3dcfcf70e, type: 3}
+  recipes:
+  - itemA: {fileID: 11400000, guid: 3195eb4eec5d0ad4d9b50c9b7e21ff8d, type: 2}
+    itemB: {fileID: 11400000, guid: 1ec3b9a8117994b499e8626d68816746, type: 2}

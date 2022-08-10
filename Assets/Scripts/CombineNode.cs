@@ -8,7 +8,9 @@ using UnityEngine;
 /// </summary>
 public class CombineNode : Node
 {
-    public StraightRailNode input1, input2, output;
+    public RailNode input1, input2, output;
+    public RailCart cartPrefab;
+    private bool IsWaitingForOutput;
 
     private void Start()
     {
@@ -18,9 +20,41 @@ public class CombineNode : Node
 
     private void OnInputOfferedItem()
     {
-        // Check items offered on both rails,
-        //      if they can be combined
-        //          combine them and output
-        //      
+        TryCombineInput();
+    }
+
+    private void Update()
+    {
+        if(IsWaitingForOutput)
+        {
+            if (!output.HasCart)
+                TryCombineInput();
+        }
+    }
+
+    private void TryCombineInput()
+    {
+        if (input1.HasAwaitingCart && input2.HasAwaitingCart && !output.HasCart)
+        {
+            IsWaitingForOutput = false;
+
+            RailCart cart1 = input1.Pop();
+            RailCart cart2 = input2.Pop();
+
+            Item combinedItem = Combiner.Combine(cart1.Content, cart2.Content);
+
+            if (combinedItem != null)
+            {
+                RailCart newCart = Instantiate(cartPrefab, output.transform.position, cartPrefab.transform.rotation);
+                newCart.SetItem(combinedItem);
+                cart1.Kill();
+                cart2.Kill();
+            }
+            else
+            {
+                cart1.Explode();
+                cart2.Explode();
+            }
+        }
     }
 }

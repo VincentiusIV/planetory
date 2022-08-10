@@ -28,6 +28,11 @@ public class SingleBuildHandler : BuildHandler
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
         Vector3 gridPosition = NodeGrid.Instance.SnapToGrid(mouseWorldPosition);
         prefabInstance.transform.position = gridPosition;       
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            prefabInstance.transform.rotation *= Quaternion.Euler(0, 0, 90);
+        }
     }
 
     public override bool ConfirmBuild()

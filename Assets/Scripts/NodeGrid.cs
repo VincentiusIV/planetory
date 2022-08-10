@@ -7,8 +7,8 @@ using Object = UnityEngine.Object;
 public class NodeSlot
 {
     public Vector2Int Position { get; }
-    public bool IsFilled => node != null;
-    public Node node;
+    public bool HasNodes => nodes.Count > 0;
+    public List<Node> nodes = new List<Node>();
 
     public NodeSlot(int x, int y)
     {
@@ -19,18 +19,20 @@ public class NodeSlot
     {
         if (!CanPlace(node))
             return false;
-        this.node = node;
+        nodes.Add(node);
         return true;
     }
 
     public bool CanPlace(Node node)
     {
-        return !IsFilled;
+        return !HasNodes || nodes[0].CanBeCombinedWith(node);
     }
 
     public void Clear()
     {
-        Object.Destroy(node.gameObject);
+        foreach (var node in nodes)
+            Object.Destroy(node.gameObject);
+        nodes.Clear();
     }
 }
 
