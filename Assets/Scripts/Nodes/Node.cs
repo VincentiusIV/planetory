@@ -4,20 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public interface IInput 
-{
-    void InsertItem(Item item);
-}
-
-public interface IOutput
-{
-
-}
-
 public class Node : MonoBehaviour
 {
     public bool IsInPreviewMode { get; private set; }
-
+    public bool IsDestructable = true;
     private Node[] subnodes;
     private PreviewNode previewNode;
 
@@ -32,7 +22,7 @@ public class Node : MonoBehaviour
     {
         return new SingleBuildHandler(resource);
     }
-
+    
     public virtual bool CanBeCombinedWith(Node node)
     {
         return false;
@@ -48,6 +38,14 @@ public class Node : MonoBehaviour
             wasPlaced &= subnode.Place();
         Debug.Assert(wasPlaced);
         return wasPlaced;
+    }
+
+    internal void Kill()
+    {
+        Node node = GetComponentInParent<Node>();
+        if (node == null)
+            node = this;
+        Destroy(node.gameObject);
     }
 
     public void EnterPreviewMode()
@@ -79,7 +77,7 @@ public class Node : MonoBehaviour
     {
         NodeSlot slot = NodeGrid.Instance.GetSlot(transform.position);
         if (slot != null)
-            return !slot.HasNodes;
+            return slot.CanPlace(this);
         else
             return false;
     }

@@ -8,6 +8,7 @@ public abstract class RailNode : Node
     public UnityEvent OnCartAwaitingTransfer { get; set; } = new UnityEvent();
     public bool HasAwaitingCart => AwaitingCart != null;
     public bool HasCart => currentCarts.Count > 0;
+    public bool allowCombinations = true;
     protected RailCart AwaitingCart;
     private List<RailCart> currentCarts = new List<RailCart>();
     private int nextRailIdx = 0;
@@ -48,20 +49,23 @@ public abstract class RailNode : Node
         return cart;
     }
 
-    public bool Contains(RailCart cart)
+    public bool Contains(RailCart cart, Vector3 position)
     {
-        Vector3 diff = cart.transform.position - transform.position;
+        Vector3 diff = position - transform.position;
         return Mathf.Abs(diff.x) < 0.49f && Mathf.Abs(diff.y) < 0.49f;
     }
 
     public RailNode Next(Vector3 dir)
     {
-        dir = dir.RoundToInt();
+        (Vector3, Vector3) endpointDirs = GetEndpointDirections();
+        Vector3 dirToUse = endpointDirs.Item1;
+        if (Vector3.Dot(dir, endpointDirs.Item1) < Vector3.Dot(dir, endpointDirs.Item2))
+            dirToUse = endpointDirs.Item2;
 
-        NodeSlot nextSlot = NodeGrid.Instance.GetSlot(transform.position + dir);
+        NodeSlot nextSlot = NodeGrid.Instance.GetSlot(transform.position + dirToUse);
         if (nextSlot == null || !nextSlot.HasNodes)
             return null;
-        (Vector3, bool) originEndpoint = GetEndpoint(dir);
+        (Vector3, bool) originEndpoint = GetEndpoint(dirToUse);
         if (!originEndpoint.Item2)
             // this node doesnt have an endpoint in given direction.
             return null;
@@ -72,7 +76,7 @@ public abstract class RailNode : Node
             RailNode railNode = node as RailNode;
             if(railNode != null)
             {
-                (Vector3, bool) connectedEndpoint = railNode.GetEndpoint(-dir);
+                (Vector3, bool) connectedEndpoint = railNode.GetEndpoint(-dirToUse);
                 if (connectedEndpoint.Item2)
                     validNodes.Add(railNode);
             }
@@ -86,12 +90,34 @@ public abstract class RailNode : Node
 
     public override bool CanBeCombinedWith(Node node)
     {
-        return (node as RailNode) != null;
+        float thisYRot = ClampAngle(transform.eulerAngles.z, -180.0f, 180.0f);
+        float theirYRot = ClampAngle(node.transform.eulerAngles.z, -180.0f, 180.0f);
+
+        return allowCombinations && ((node as RailNode) != null && 
+            ((thisYRot != theirYRot) ||
+            (node.GetType() != GetType())));
     }
 
-    public RailCart SpawnCart(RailCart cartPrefab)
+    static float ClampAngle(float angle, float min, float max)
     {
-        return Instantiate(cartPrefab, transform.position, transform.rotation);
+        if (angle < -180.0f)
+            angle += 360.0f;
+        if (angle > 180.0f)
+            angle -= 360.0f;
+        return Mathf.Clamp(angle, min, max);
+    }
+
+    public RailCart SpawnCart(Node sourceNode, RailCart cartPrefab)
+    {
+        (Vector3, Vector3) outputEndpoints = GetEndpoints();
+        Vector3 diff1 = outputEndpoints.Item1 - sourceNode.transform.position;
+        Vector3 diff2 = outputEndpoints.Item2 - sourceNode.transform.position;
+        Vector3 spawnPos = outputEndpoints.Item1 - (outputEndpoints.Item1 -transform.position).normalized * 0.1f;
+        if (diff1.sqrMagnitude > diff2.sqrMagnitude)
+            spawnPos = outputEndpoints.Item2 - (outputEndpoints.Item2 - transform.position).normalized * 0.1f;
+        RailCart newCart = Instantiate(cartPrefab, spawnPos, transform.rotation);
+        newCart.Setup(this);
+        return newCart;
     }
 
     public (Vector3, bool) GetEndpoint(Vector3 dir)
@@ -109,6 +135,15 @@ public abstract class RailNode : Node
 
     public abstract Vector3 Constrain(Vector3 position);
     public abstract (Vector3, Vector3) GetEndpoints();
+
+    public (Vector3, Vector3) GetEndpointDirections()
+    {
+        (Vector3, Vector3) endpoints = GetEndpoints();
+        return (
+            (endpoints.Item1 - transform.position).normalized,
+            (endpoints.Item2 - transform.position).normalized
+        );
+    }
 }
 
 public class StraightRailNode : RailNode

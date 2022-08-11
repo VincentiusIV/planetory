@@ -10,7 +10,11 @@ public class CombineNode : Node
 {
     public RailNode input1, input2, output;
     public RailCart cartPrefab;
+
+    public float timeToCombine = 5.0f;
+
     private bool IsWaitingForOutput;
+    private float combineTimer;
 
     private void Start()
     {
@@ -28,7 +32,14 @@ public class CombineNode : Node
         if(IsWaitingForOutput)
         {
             if (!output.HasCart)
-                TryCombineInput();
+            {
+                combineTimer -= Time.deltaTime;
+                if(combineTimer < 0)
+                {
+                    combineTimer = timeToCombine;
+                    TryCombineInput();
+                }
+            }
         }
     }
 
@@ -45,7 +56,8 @@ public class CombineNode : Node
 
             if (combinedItem != null)
             {
-                RailCart newCart = Instantiate(cartPrefab, output.transform.position, cartPrefab.transform.rotation);
+
+                RailCart newCart = output.SpawnCart(this, cartPrefab);
                 newCart.SetItem(combinedItem);
                 cart1.Kill();
                 cart2.Kill();

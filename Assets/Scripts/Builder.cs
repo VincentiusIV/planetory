@@ -34,12 +34,14 @@ public abstract class BuildHandler
     public abstract bool ConfirmBuild();
     public abstract void Update();
     public abstract bool CancelBuild();
+    public abstract void DeleteNode();
 }
 
 public class Builder : Singleton<Builder>
 {
     public BuildResource[] resources;
     public PreviewNode previewNodePrefab;
+    public LayerMask clickPlaneLayer;
 
     private BuildHandler activeBuildHandler;
 
@@ -60,9 +62,14 @@ public class Builder : Singleton<Builder>
 
         if(activeBuildHandler != null)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButton(0))
             {
                 activeBuildHandler.ConfirmBuild();
+            }
+
+            if(Input.GetMouseButton(1))
+            {
+                 activeBuildHandler.DeleteNode();
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))

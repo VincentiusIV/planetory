@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ResourceNode : Node, IOutput
+public class ResourceNode : Node
 {
     public float timeBetweenSpawn = 1.0f;
 
@@ -36,7 +36,7 @@ public class ResourceNode : Node, IOutput
 
             if (nextCartSpawnTimer <= 0.0f)
             {
-                RailCart newCart = outputRail.SpawnCart(cartPrefab);
+                RailCart newCart = outputRail.SpawnCart(this, cartPrefab);
                 newCart.SetItem(outputItem);
                 outputRail.OnCartEnter(newCart);
                 nextCartSpawnTimer = timeBetweenSpawn;

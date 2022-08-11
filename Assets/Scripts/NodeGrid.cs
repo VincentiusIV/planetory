@@ -23,16 +23,25 @@ public class NodeSlot
         return true;
     }
 
-    public bool CanPlace(Node node)
+    public bool CanPlace(Node newNode)
     {
-        return !HasNodes || nodes[0].CanBeCombinedWith(node);
+        bool canBeCombined = true;
+        foreach (var currentNode in nodes)
+            canBeCombined &= currentNode.CanBeCombinedWith(newNode);
+        return !HasNodes || canBeCombined;
     }
 
     public void Clear()
     {
-        foreach (var node in nodes)
-            Object.Destroy(node.gameObject);
-        nodes.Clear();
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            Node node = nodes[i];
+            if(node.IsDestructable)
+            {
+                node.Kill();
+                nodes.RemoveAt(i--);
+            }
+        }
     }
 }
 

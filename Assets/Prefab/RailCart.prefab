@@ -158,8 +158,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
-  m_Center: {x: 0.3, y: 0, z: -0.3}
+  m_Radius: 0.25
+  m_Center: {x: 0.4, y: 0, z: -0.3}
 --- !u!114 &8549846805035831083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,7 +174,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   lookAheadDist: 0.5
-  headOnCollisionDot: -0.5
+  headOnCollisionDot: -0.8
+  forwardCollisionDot: 0.75
+  rightCollisionDot: 0
+  forwardLookDistance: 0.55
   explosionPrefab:
   - {fileID: 4145716251373509039, guid: e247537cd5061d04c9761355ce880c33, type: 3}
   - {fileID: 4433722513399432889, guid: abed813425d702646aeb928dd0ee72e6, type: 3}

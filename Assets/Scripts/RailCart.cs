@@ -9,10 +9,19 @@ using Random = UnityEngine.Random;
 public class RailCart : MonoBehaviour
 {
     public Vector3 Forward => transform.right;
+    public Vector3 Right => transform.up;
+    public Vector3 FrontPosition => transform.position + Forward * forwardLookDistance;
     public Item Content { get; set; }
-    public float speed = 1.0f, lookAheadDist = 0.3f;
+    public float maxSpeed = 1.0f, lookAheadDist = 0.3f;
+    public float acceleration = 1.0f;
     public bool IsHalted { get; private set; }
     public float headOnCollisionDot = -0.2f;
+    public float forwardCollisionDot = 0.5f;
+    public float rightCollisionDot = 0;
+    public float forwardLookDistance = 0.55f;
+
+    public float Speed { get; private set; }
+
     public GameObject[] explosionPrefab;
     public MeshRenderer itemIconRenderer;
 
@@ -22,15 +31,20 @@ public class RailCart : MonoBehaviour
 
     private void Awake()
     {
-        Rigidbody = GetComponent<Rigidbody>();
+        Rigidbody = GetComponent<Rigidbody>(); 
+        gameObject.SetActive(false);
     }
     private void Start()
     {
-
-        NodeSlot newSlot = NodeGrid.Instance.GetSlot(transform.position);
-        currentRail = newSlot.HasNodes ? newSlot.nodes[Random.Range(0, newSlot.nodes.Count)] as RailNode : null;
-        Debug.Assert(currentRail != null, "RailCart was not spawned on a rail node!");
     }
+
+    public void Setup(RailNode currentRail)
+    {
+        this.currentRail = currentRail;
+        this.currentRail.OnCartEnter(this);
+        gameObject.SetActive(true);
+    }
+
     public void SetItem(Item item)
     {
         Debug.Assert(Content == null);
@@ -46,17 +60,23 @@ public class RailCart : MonoBehaviour
     private void FixedUpdate()
     {
         if (AreNearbyCartsInFront())
+        {
+            Speed = 0.0f;
             return;
+        }
 
-        if(!currentRail.Contains(this))
+        if(!currentRail.Contains(this, FrontPosition))
         {
             RailNode nextRail = currentRail.Next(Forward);
             if(nextRail != null)
             {
-                IsHalted = false;
-                currentRail.OnCartExit(this);
-                currentRail = nextRail;
-                currentRail.OnCartEnter(this);
+                IsHalted = nextRail.HasCart;
+                if (!currentRail.Contains(this, transform.position))
+                {
+                    currentRail.OnCartExit(this);
+                    currentRail = nextRail;
+                    currentRail.OnCartEnter(this);
+                }
             }
             else
             {
@@ -66,22 +86,30 @@ public class RailCart : MonoBehaviour
             }
         }
 
-        if(!IsHalted)
+        if (!IsHalted)
         {
+            Speed += acceleration * Time.fixedDeltaTime;
+            Speed = Mathf.Min(Speed, maxSpeed);
+
             IsHalted = false;
             Vector3 lastPosition = transform.position;
-            Vector3 move = Forward * speed * Time.fixedDeltaTime;
+            Vector3 move = Forward * Speed * Time.fixedDeltaTime;
             transform.position += move;
             transform.position = currentRail.Constrain(transform.position);
-            Vector3 delta = (transform.position - lastPosition);
-            //Vector3 projectedDelta = Vector3.ProjectOnPlane(delta, -Vector3.forward);
-            if(delta.magnitude > 0.00001)
+
+            Vector3 constrainedFront = currentRail.Constrain(FrontPosition);
+            Vector3 lookdir = (constrainedFront - transform.position).normalized;
+            if (lookdir.magnitude > 0.00001)
             {
-                var angle = Mathf.Atan2(delta.normalized.y, delta.normalized.x) * Mathf.Rad2Deg;
+                var angle = Mathf.Atan2(lookdir.y, lookdir.x) * Mathf.Rad2Deg;
                 Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.fixedDeltaTime * 5);
             }
+        }
+        else
+        {
+            Speed = 0.0f;
         }
     }
 
@@ -103,8 +131,12 @@ public class RailCart : MonoBehaviour
                 return true;
             }
 
-            Vector3 dir = cart.transform.position - transform.position;
-            if (Vector3.Dot(dir, Forward) > 0.0f)
+            Vector3 dir = (cart.transform.position - transform.position).normalized;
+
+            if (Vector3.Dot(dir, Forward) > forwardCollisionDot)
+                return true;
+
+            if (Vector3.Dot(Right, dir) > rightCollisionDot) 
                 return true;
         }
         return false;
@@ -112,8 +144,11 @@ public class RailCart : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.isTrigger)
+            return;
+
         RailCart otherCart = other.GetComponent<RailCart>();
-        if(otherCart != null)
+        if(otherCart != null && otherCart != this)
         {
             nearbyCarts.Add(otherCart);
         }
@@ -121,8 +156,11 @@ public class RailCart : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.isTrigger)
+            return;
+
         RailCart otherCart = other.GetComponent<RailCart>();
-        if (otherCart != null)
+        if (otherCart != null && otherCart != this)
         {
             if (nearbyCarts.Contains(otherCart))
                 nearbyCarts.Remove(otherCart);
