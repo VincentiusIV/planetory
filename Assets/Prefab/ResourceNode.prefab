@@ -179,7 +179,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Fire
+  m_text: Sea
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 80674a7c5d9df764a9ed6acd2a9da517, type: 2}
   m_sharedMaterial: {fileID: -8055165426776686845, guid: 80674a7c5d9df764a9ed6acd2a9da517,
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsDestructable: 1
   timeBetweenSpawn: 1
-  outputItem: {fileID: 11400000, guid: 3195eb4eec5d0ad4d9b50c9b7e21ff8d, type: 2}
+  outputItem: {fileID: 0}
   cartPrefab: {fileID: 8549846805035831083, guid: 8bbec1b97d7886f418f2b6b92a7a8a1f,
     type: 3}
   outputRail: {fileID: 8850283398397269769}
@@ -484,19 +484,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1890238992}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1885753523292825814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132147823411009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20cc746f2e721d3449b189bd2c640a7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0, z: 0}
 --- !u!64 &3785642249071698385
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -511,6 +498,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -710946340445067694, guid: ad9a0929f12d51e43873790557d0018b, type: 3}
+--- !u!114 &1885753523292825814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147823411009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20cc746f2e721d3449b189bd2c640a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1001 &1290759750586145166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -690,7 +690,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7035287144875016736, guid: 10d520665f153fc4ca0879f300d75a68,
         type: 3}
+      propertyPath: isEndpoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7035287144875016736, guid: 10d520665f153fc4ca0879f300d75a68,
+        type: 3}
       propertyPath: IsDestructable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7035287144875016736, guid: 10d520665f153fc4ca0879f300d75a68,
+        type: 3}
+      propertyPath: endpointTriggerIndex
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

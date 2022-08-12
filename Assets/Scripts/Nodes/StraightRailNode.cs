@@ -9,6 +9,8 @@ public abstract class RailNode : Node
     public bool HasAwaitingCart => AwaitingCart != null;
     public bool HasCart => currentCarts.Count > 0;
     public bool allowCombinations = true;
+    public bool isEndpoint = false;
+    public int endpointTriggerIndex = 0;
     protected RailCart AwaitingCart;
     private List<RailCart> currentCarts = new List<RailCart>();
     private int nextRailIdx = 0;
@@ -26,24 +28,37 @@ public abstract class RailNode : Node
             currentCarts.Remove(cart);
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         foreach (var cart in currentCarts)
         {
-            if(cart != null)
+            if (cart != null)
                 Destroy(cart.gameObject);
         }
     }
 
     public void Push(RailCart railCart)
     {
-        Debug.Assert(AwaitingCart == null);
-        AwaitingCart = railCart;
-        OnCartAwaitingTransfer?.Invoke();
+        if (!isEndpoint)
+            return;
+        (Vector3, Vector3) endpoints = GetEndpoints();
+        Vector3 endpoint = endpointTriggerIndex == 0 ? endpoints.Item1 : endpoints.Item2;
+        Vector3 diff = endpoint - railCart.FrontPosition;
+        if(diff.sqrMagnitude < 0.1f)
+        {
+            Debug.Assert(AwaitingCart == null);
+            AwaitingCart = railCart;
+            OnCartAwaitingTransfer?.Invoke();
+        }
     }
 
     public RailCart Pop()
     {
+        if (!isEndpoint)
+            return null;
+
         RailCart cart = AwaitingCart;
         AwaitingCart = null;
         return cart;
@@ -93,7 +108,7 @@ public abstract class RailNode : Node
         float thisYRot = ClampAngle(transform.eulerAngles.z, -180.0f, 180.0f);
         float theirYRot = ClampAngle(node.transform.eulerAngles.z, -180.0f, 180.0f);
 
-        return allowCombinations && ((node as RailNode) != null && 
+        return !isEndpoint && allowCombinations && ((node as RailNode) != null && 
             ((thisYRot != theirYRot) ||
             (node.GetType() != GetType())));
     }
@@ -112,9 +127,9 @@ public abstract class RailNode : Node
         (Vector3, Vector3) outputEndpoints = GetEndpoints();
         Vector3 diff1 = outputEndpoints.Item1 - sourceNode.transform.position;
         Vector3 diff2 = outputEndpoints.Item2 - sourceNode.transform.position;
-        Vector3 spawnPos = outputEndpoints.Item1 - (outputEndpoints.Item1 -transform.position).normalized * 0.1f;
+        Vector3 spawnPos = outputEndpoints.Item1 - (outputEndpoints.Item1 -transform.position).normalized * 0.05f;
         if (diff1.sqrMagnitude > diff2.sqrMagnitude)
-            spawnPos = outputEndpoints.Item2 - (outputEndpoints.Item2 - transform.position).normalized * 0.1f;
+            spawnPos = outputEndpoints.Item2 - (outputEndpoints.Item2 - transform.position).normalized * 0.05f;
         RailCart newCart = Instantiate(cartPrefab, spawnPos, transform.rotation);
         newCart.Setup(this);
         return newCart;
@@ -167,6 +182,14 @@ public class StraightRailNode : RailNode
     {
         Gizmos.color = Color.green;
         Gizmos.DrawLine(inPositionWorld, outPositionWorld);
+
+        if(isEndpoint)
+        {
+            (Vector3, Vector3) endpoints = GetEndpoints();
+            Vector3 endpoint = endpointTriggerIndex == 0 ? endpoints.Item1 : endpoints.Item2;
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(endpoint, 0.1f);
+        }
     }
 }
 

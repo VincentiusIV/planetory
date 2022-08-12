@@ -33,19 +33,26 @@ public class Node : MonoBehaviour
         if (!CanWholeNodeBePlaced())
             return false;
         ExitPreviewMode();
-        bool wasPlaced = NodeGrid.Instance.PlaceNode(this);
+        bool wasPlaced = NodeGrid.Instance.Place(this);
         foreach (var subnode in subnodes)
             wasPlaced &= subnode.Place();
         Debug.Assert(wasPlaced);
         return wasPlaced;
     }
 
-    internal void Kill()
+    public void Kill()
     {
-        Node node = GetComponentInParent<Node>();
+        Node node = this;
+        if(transform.parent != null)
+            node = transform.parent.GetComponentInParent<Node>();
         if (node == null)
             node = this;
         Destroy(node.gameObject);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        NodeGrid.Remove(this);
     }
 
     public void EnterPreviewMode()

@@ -23,6 +23,13 @@ public class NodeSlot
         return true;
     }
 
+    public bool Remove(Node node)
+    {
+        if (nodes.Contains(node))
+            return nodes.Remove(node);
+        return false;
+    }
+
     public bool CanPlace(Node newNode)
     {
         bool canBeCombined = true;
@@ -100,7 +107,7 @@ public class NodeGrid : Singleton<NodeGrid>
             return null;
     }
 
-    public bool PlaceNode(Node node)
+    public bool Place(Node node)
     {
         NodeSlot slot = GetSlot(node.transform.position);
         if (slot == null)
@@ -108,7 +115,17 @@ public class NodeGrid : Singleton<NodeGrid>
         if (slot.CanPlace(node))
             return slot.Fill(node);
         else
+            return false;        
+    }
+
+    public static bool Remove(Node node)
+    {
+        if (!Instance)
+            return true;
+        NodeSlot slot = Instance.GetSlot(node.transform.position);
+        if (slot == null)
             return false;
+        return slot.Remove(node);
     }
 
     private void OnDrawGizmos()

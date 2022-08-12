@@ -27,7 +27,7 @@ public class OutputNode : Node
 
     private void Start()
     {
-        NodeGrid.Instance.PlaceNode(inputRail);
+        NodeGrid.Instance.Place(inputRail);
     }
 
     private void OnCartAwaitingTransfer()

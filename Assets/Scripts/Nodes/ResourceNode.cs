@@ -19,7 +19,7 @@ public class ResourceNode : Node
     {
         base.Awake();
         Debug.Assert(outputItem != null);
-        NodeGrid.Instance.PlaceNode(outputRail);
+        NodeGrid.Instance.Place(outputRail);
     }
 
     private void Start()
