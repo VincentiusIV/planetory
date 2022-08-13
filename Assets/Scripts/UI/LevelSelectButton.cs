@@ -19,6 +19,7 @@ public class LevelSelectButton : MonoBehaviour
     public void Setup(int levelIndex)
     {
         this.levelIndex = levelIndex;
+        levelField.text = levelIndex.ToString();
     }
 
     private void OnClick()

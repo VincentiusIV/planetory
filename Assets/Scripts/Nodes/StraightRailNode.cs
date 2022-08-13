@@ -10,6 +10,7 @@ public abstract class RailNode : Node
     public bool HasCart => currentCarts.Count > 0;
     public bool allowCombinations = true;
     public bool isEndpoint = false;
+    public int minRotation = -180, maxRotation = 180;
     public int endpointTriggerIndex = 0;
     protected RailCart AwaitingCart;
     private List<RailCart> currentCarts = new List<RailCart>();
@@ -111,8 +112,8 @@ public abstract class RailNode : Node
 
     public override bool CanBeCombinedWith(Node node)
     {
-        float thisYRot = ClampAngle(transform.eulerAngles.z, -180.0f, 180.0f);
-        float theirYRot = ClampAngle(node.transform.eulerAngles.z, -180.0f, 180.0f);
+        float thisYRot = ClampAngle(transform.eulerAngles.z, minRotation, maxRotation);
+        float theirYRot = ClampAngle(node.transform.eulerAngles.z, minRotation, maxRotation);
 
         return !isEndpoint && allowCombinations && ((node as RailNode) != null && 
             ((thisYRot != theirYRot) ||

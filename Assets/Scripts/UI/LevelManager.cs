@@ -28,11 +28,13 @@ public class LevelManager : Singleton<LevelManager>
         Debug.Assert(index >= 0 && index < levelNames.Length);
         index = Mathf.Clamp(index, 0, levelNames.Length);
         SceneManager.LoadScene(levelNames[index]);
+        MusicSystem.Instance.ChooseNextTrack();
         PlayerPrefs.SetInt(LAST_LEVEL_INDEX, index);
     }
 
     public void GoToMainMenu()
     {
         SceneManager.LoadScene(menuName);
+        MusicSystem.Instance.ChooseNextTrack();
     }
 }

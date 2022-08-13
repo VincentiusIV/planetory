@@ -49,6 +49,8 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 89fea5287ad50d346bc5127990a660dd, type: 3}
   allowCombinations: 1
   isEndpoint: 0
+  minRotation: -180
+  maxRotation: 180
   endpointTriggerIndex: 0
   inPositionLocal: {x: -0.5, y: 0, z: 0}
   outPositionLocal: {x: 0.5, y: 0, z: 0}

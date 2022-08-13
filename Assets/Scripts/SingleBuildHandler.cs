@@ -29,9 +29,14 @@ public class SingleBuildHandler : BuildHandler
 
         prefabInstance.transform.position = Builder.Instance.SelectionPosition;
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.R) || Input.mouseScrollDelta.y > 0)
         {
             instanceRotation *= Quaternion.Euler(0, 0, 90);
+            prefabInstance.transform.rotation = instanceRotation;
+        }
+        else if(Input.mouseScrollDelta.y < 0)
+        {
+            instanceRotation *= Quaternion.Euler(0, 0, -90);
             prefabInstance.transform.rotation = instanceRotation;
         }
     }

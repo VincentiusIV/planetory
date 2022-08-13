@@ -25,7 +25,7 @@ public class MusicSystem : Singleton<MusicSystem>
         }
     }
 
-    private void ChooseNextTrack()
+    public void ChooseNextTrack()
     {
         Debug.Assert(tracks.Length > 0);
         int randIdx = Random.Range(0, tracks.Length);
