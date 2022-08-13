@@ -10,6 +10,7 @@ public class StartMenu : MonoBehaviour
     public Button playButton, levelsButton, quitButton;
     public GameObject levelSelectRoot;
     public LevelSelectButton[] levelSelectButtons;
+    public Texture2D cursor;
 
     private void Awake()
     {
@@ -20,6 +21,9 @@ public class StartMenu : MonoBehaviour
 
         for (int i = 0; i < levelSelectButtons.Length; i++)
             levelSelectButtons[i].Setup(i);
+
+        Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
+
     }
 
     private void OnQuitClick()
@@ -34,6 +38,6 @@ public class StartMenu : MonoBehaviour
 
     private void OnPlayClick()
     {
-        LevelManager.Instance.Play();
+        LevelManager.Play();
     }
 }

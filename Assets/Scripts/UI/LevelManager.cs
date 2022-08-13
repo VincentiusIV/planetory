@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class LevelManager : Singleton<LevelManager>
 {
     public static string LAST_LEVEL_INDEX = "LastLevelIndex";
+    public static string IS_LEVEL_COMPLETE = "IsLevelComplete{0}";
     public string menuName = "StartMenu";
     public string[] levelNames;
 
@@ -15,26 +16,56 @@ public class LevelManager : Singleton<LevelManager>
         DontDestroyOnLoad(gameObject);
     }
 
-    public void Play()
+    public static void Play()
     {
         if (!PlayerPrefs.HasKey(LAST_LEVEL_INDEX))
             PlayerPrefs.SetInt(LAST_LEVEL_INDEX, 0);
         int lastIndex = PlayerPrefs.GetInt(LAST_LEVEL_INDEX);
-        LevelManager.Instance.Play(lastIndex);
+        Play(lastIndex);
     }
 
-    public void Play(int index)
+    public static void PlayNext()
     {
-        Debug.Assert(index >= 0 && index < levelNames.Length);
-        index = Mathf.Clamp(index, 0, levelNames.Length);
-        SceneManager.LoadScene(levelNames[index]);
+        int nextIndex = PlayerPrefs.GetInt(LAST_LEVEL_INDEX) + 1;
+        if(nextIndex >= Instance.levelNames.Length)
+        {
+            nextIndex = 0;
+            GoToMainMenu();
+        }
+        else
+        {
+            Play(nextIndex);
+        }
+        PlayerPrefs.SetInt(LAST_LEVEL_INDEX, nextIndex);
+    }
+
+    public static void Play(int index)
+    {
+        Debug.Assert(index >= 0 && index < Instance.levelNames.Length);
+        index = Mathf.Clamp(index, 0, Instance.levelNames.Length);
+        SceneManager.LoadScene(Instance.levelNames[index]);
         MusicSystem.Instance.ChooseNextTrack();
         PlayerPrefs.SetInt(LAST_LEVEL_INDEX, index);
     }
 
-    public void GoToMainMenu()
+    public static void GoToMainMenu()
     {
-        SceneManager.LoadScene(menuName);
+        SceneManager.LoadScene(Instance.menuName);
         MusicSystem.Instance.ChooseNextTrack();
+    }
+
+    public static void MarkLevelComplete(int index)
+    {
+        string key = string.Format(IS_LEVEL_COMPLETE, index);
+        PlayerPrefs.SetInt(key, 1);
+    }
+
+    public static bool IsLevelComplete(int index)
+    {
+        string key = string.Format(IS_LEVEL_COMPLETE, index);
+        if (!PlayerPrefs.HasKey(key))
+            return false;
+        int levelComplete = PlayerPrefs.GetInt(key);
+        return levelComplete == 1;
     }
 }
