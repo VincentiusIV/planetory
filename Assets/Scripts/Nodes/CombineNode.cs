@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// 2 In, 1 Out
 /// </summary>
 public class CombineNode : Node
 {
+    public UnityEvent OnCombine;
     public RailNode input1, input2, output;
     public RailCart cartPrefab;
 
@@ -75,7 +77,7 @@ public class CombineNode : Node
 
             if (combinedItem != null)
             {
-
+                OnCombine.Invoke();
                 RailCart newCart = output.SpawnCart(this, cartPrefab);
                 newCart.SetItem(combinedItem);
                 cart1.Kill();
@@ -105,6 +107,7 @@ public class CombineNode : Node
 
             if (splitItem.Item1 != null)
             {
+                OnCombine.Invoke();
                 RailCart newCart = input1.SpawnCart(this, cartPrefab);
                 newCart.SetItem(splitItem.Item1);
             }

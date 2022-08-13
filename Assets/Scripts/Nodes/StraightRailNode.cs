@@ -54,6 +54,12 @@ public abstract class RailNode : Node
         }
     }
 
+    public Vector3 GetTriggerEndpoint()
+    {
+        (Vector3, Vector3) endpoints = GetEndpoints();
+        return endpointTriggerIndex == 0 ? endpoints.Item1 : endpoints.Item2;
+    }
+
     public RailCart Pop()
     {
         if (!isEndpoint)

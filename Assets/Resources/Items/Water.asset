@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Icon: {fileID: 2800000, guid: df22dad5573b38c4abb3a788ca65a197, type: 3}
   recipes: []
+  HeatingResult: {fileID: 11400000, guid: 7d6ffa13f542ce44fb7387b50fe22c2a, type: 2}
+  EnergizedResult: {fileID: 0}

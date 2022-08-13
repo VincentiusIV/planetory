@@ -8,7 +8,8 @@ public class Node : MonoBehaviour
 {
     public bool IsInPreviewMode { get; private set; }
     public bool IsDestructable = true;
-    private Node[] subnodes;
+    public Node[] subnodes { get; private set; }
+    public Sprite Icon;
     private PreviewNode previewNode;
 
     protected virtual void Awake()
@@ -67,7 +68,8 @@ public class Node : MonoBehaviour
     public void ExitPreviewMode()
     {
         IsInPreviewMode = false;
-        Destroy(previewNode.gameObject);
+        if(previewNode != null)
+            Destroy(previewNode.gameObject);
         foreach (var subnode in subnodes)
             subnode.ExitPreviewMode();
     }

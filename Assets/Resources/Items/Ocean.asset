@@ -16,3 +16,5 @@ MonoBehaviour:
   recipes:
   - itemA: {fileID: 11400000, guid: c24243ebe5d7780409f82903e696f758, type: 2}
     itemB: {fileID: 11400000, guid: c24243ebe5d7780409f82903e696f758, type: 2}
+  HeatingResult: {fileID: 11400000, guid: 7d6ffa13f542ce44fb7387b50fe22c2a, type: 2}
+  EnergizedResult: {fileID: 11400000, guid: b2bdd335f957c4543a86f3edfdac44fe, type: 2}

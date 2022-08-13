@@ -39,14 +39,22 @@ public abstract class BuildHandler
 
 public class Builder : Singleton<Builder>
 {
+    public bool IsInDemolitionMode { get; private set; }
+    public NodeSlot SelectedSlot { get; private set; }
+    public Vector3 SelectionPosition { get; private set; }
     public BuildResource[] resources;
     public PreviewNode previewNodePrefab;
     public LayerMask clickPlaneLayer;
+    public FXPlayCombo placeFX;
+
+    public Texture2D defaultCursor, demolitionCursor;
 
     private BuildHandler activeBuildHandler;
 
     private void Update()
     {
+        UpdateSelectedSlot();
+
         activeBuildHandler?.Update();
 
         for (int i = 0; i < Mathf.Min(9, resources.Length); i++)
@@ -54,9 +62,7 @@ public class Builder : Singleton<Builder>
             KeyCode alphaNumeric = (KeyCode)((int)KeyCode.Alpha1 + i);
             if (Input.GetKeyDown(alphaNumeric))
             {
-                activeBuildHandler?.CancelBuild();
-                activeBuildHandler = resources[i].CreateBuildHandler();
-                activeBuildHandler?.StartBuild();
+                StartBuilding(resources[i]);
             }
         }
 
@@ -64,14 +70,18 @@ public class Builder : Singleton<Builder>
         {
             if (Input.GetMouseButton(0))
             {
-                activeBuildHandler.ConfirmBuild();
+                if (IsInDemolitionMode)
+                    activeBuildHandler.DeleteNode();
+                else
+                    activeBuildHandler.ConfirmBuild();
             }
 
+#if UNITY_EDITOR
             if(Input.GetMouseButton(1))
             {
                  activeBuildHandler.DeleteNode();
             }
-
+#endif
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 activeBuildHandler?.CancelBuild();
@@ -79,6 +89,38 @@ public class Builder : Singleton<Builder>
             }
         }
         
+    }
+
+    private void UpdateSelectedSlot()
+    {
+        Vector3 mouseScreenPosition = Input.mousePosition;
+        if (Camera.main.orthographic)
+        {
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+            Vector3 gridPosition = NodeGrid.Instance.SnapToGrid(mouseWorldPosition);
+            SelectedSlot = NodeGrid.Instance.GetSlot(gridPosition);
+            SelectionPosition = gridPosition;
+        }
+        else
+        {
+            Ray ray = Camera.main.ScreenPointToRay(mouseScreenPosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Camera.main.farClipPlane, Builder.Instance.clickPlaneLayer))
+            {
+                Vector3 mouseHitPosition = hit.point;
+                Vector3 gridPosition = NodeGrid.Instance.SnapToGrid(mouseHitPosition);
+                SelectedSlot = NodeGrid.Instance.GetSlot(gridPosition);
+                SelectionPosition = gridPosition;
+            }
+        }
+    }
+
+    public void StartBuilding(BuildResource resource)
+    {
+        StopDemolition();
+        activeBuildHandler?.CancelBuild();
+        activeBuildHandler = resource.CreateBuildHandler();
+        activeBuildHandler?.StartBuild();
     }
 
     private void OnValidate()
@@ -92,5 +134,26 @@ public class Builder : Singleton<Builder>
                 Debug.LogWarning("resource prefab doesnt have a node script!");
             }
         }
+    }
+
+    public void SwitchDemolitionMode()
+    {
+        if (IsInDemolitionMode)
+            StopDemolition();
+        else
+            StartDemolition();
+    }
+
+    private void StartDemolition()
+    {
+        activeBuildHandler?.CancelBuild();
+        IsInDemolitionMode = true;
+        Cursor.SetCursor(demolitionCursor, Vector2.zero, CursorMode.ForceSoftware);
+    }
+
+    private void StopDemolition()
+    {
+        IsInDemolitionMode = false;
+        Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.ForceSoftware);
     }
 }

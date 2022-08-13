@@ -46,7 +46,7 @@ ParticleSystem:
   serializedVersion: 7
   lengthInSec: 0.5
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -4898,6 +4898,8 @@ MonoBehaviour:
       m_Calls: []
   ParticleSystem: {fileID: 6554417410594524917}
   Audio: {fileID: 322739689390206839}
+  clips: []
+  playOnAwake: 0
 --- !u!82 &322739689390206839
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5144,6 +5146,11 @@ PrefabInstance:
     - target: {fileID: 236631704152436305, guid: b42871d58f74944fda6599379a4f714f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426012576455030509, guid: b42871d58f74944fda6599379a4f714f,
+        type: 3}
+      propertyPath: stopAction
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1426012576455030509, guid: b42871d58f74944fda6599379a4f714f,

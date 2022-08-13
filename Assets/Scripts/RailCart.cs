@@ -65,7 +65,9 @@ public class RailCart : MonoBehaviour
             return;
         }
 
-        if(!currentRail.Contains(this, FrontPosition))
+        Vector3 checkPosition = FrontPosition;
+
+        if (!currentRail.Contains(this, checkPosition))
         {
             RailNode nextRail = currentRail.Next(Forward);
             if(nextRail != null)
@@ -111,6 +113,14 @@ public class RailCart : MonoBehaviour
         {
             Speed = 0.0f;
         }
+    }
+
+    private bool IsHeadingTowardEndpoint()
+    {
+        if (!currentRail.isEndpoint)
+            return false;
+        Vector3 dirToEndpoint = currentRail.GetTriggerEndpoint() - transform.position;        
+        return Vector3.Dot(dirToEndpoint, Forward) > 0.5f;
     }
 
     private bool AreNearbyCartsInFront()

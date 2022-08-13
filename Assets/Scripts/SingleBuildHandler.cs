@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SingleBuildHandler : BuildHandler
 {
+    private NodeSlot selectedSlot => Builder.Instance.SelectedSlot;
     private Node prefabInstance;
-    private NodeSlot selectedSlot;
     private Quaternion instanceRotation = Quaternion.identity;
 
     public SingleBuildHandler(BuildResource resource) : base(resource)
@@ -26,26 +26,8 @@ public class SingleBuildHandler : BuildHandler
     {
         if (prefabInstance == null)
             return;
-        Vector3 mouseScreenPosition = Input.mousePosition;
-        if(Camera.main.orthographic)
-        {
-            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-            Vector3 gridPosition = NodeGrid.Instance.SnapToGrid(mouseWorldPosition);
-            selectedSlot = NodeGrid.Instance.GetSlot(gridPosition);
-            prefabInstance.transform.position = gridPosition;
-        }
-        else
-        {
-            Ray ray = Camera.main.ScreenPointToRay(mouseScreenPosition);
-            RaycastHit hit;
-            if(Physics.Raycast(ray, out hit, Camera.main.farClipPlane, Builder.Instance.clickPlaneLayer))
-            {
-                Vector3 mouseHitPosition = hit.point;
-                Vector3 gridPosition = NodeGrid.Instance.SnapToGrid(mouseHitPosition);
-                selectedSlot = NodeGrid.Instance.GetSlot(gridPosition);
-                prefabInstance.transform.position = gridPosition;
-            }
-        }
+
+        prefabInstance.transform.position = Builder.Instance.SelectionPosition;
 
         if(Input.GetKeyDown(KeyCode.R))
         {
@@ -56,10 +38,31 @@ public class SingleBuildHandler : BuildHandler
 
     public override bool ConfirmBuild()
     {
+        if (prefabInstance == null)
+            return false;
+
         bool result = prefabInstance.Place();
         if(result)
+        {
+            Builder.Instance.StartCoroutine(PlaceFXRoutine(prefabInstance));
             StartBuild();
+        }
         return result;
+    }
+
+    private IEnumerator PlaceFXRoutine(Node target)
+    {
+        Vector3[] subpositions = new Vector3[target.subnodes.Length];
+        for (int i = 0; i < target.subnodes.Length; i++)
+            subpositions[i] = target.subnodes[i].transform.position;
+        Builder.Instance.placeFX.transform.position = target.transform.position;
+        Builder.Instance.placeFX.Play();
+        foreach (var nodePos in subpositions)
+        {
+            yield return null;
+            Builder.Instance.placeFX.transform.position = nodePos;
+            Builder.Instance.placeFX.Play();
+        }
     }
 
     public override bool CancelBuild()
@@ -72,6 +75,8 @@ public class SingleBuildHandler : BuildHandler
 
     public override void DeleteNode()
     {
+        if(selectedSlot != null && selectedSlot.HasNodes)
+            Builder.Instance.StartCoroutine(PlaceFXRoutine(selectedSlot.nodes[0]));
         selectedSlot?.Clear();
     }
 }

@@ -16,7 +16,7 @@ public class IncineratorNode : Node
     private void OnInputOfferedItem()
     {
         RailCart cart = inputRail.Pop();
-        cart.Explode();
+        cart.Kill();
         OnIncinerate.Invoke();
     }
 }
