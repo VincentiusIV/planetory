@@ -37,12 +37,12 @@ public class LevelEndScreen : MonoBehaviour
         }
     }
 
-    private void NextLevel()
+    public void NextLevel()
     {
         LevelManager.PlayNext();
     }
 
-    private void BackToMenu()
+    public void BackToMenu()
     {
         LevelManager.GoToMainMenu();
     }

@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
   m_Name: Steam
   m_EditorClassIdentifier: 
-  Icon: {fileID: 2800000, guid: ed69e95c17ac46747b8b3fd3dcfcf70e, type: 3}
+  Icon: {fileID: 21300000, guid: ed69e95c17ac46747b8b3fd3dcfcf70e, type: 3}
   recipes:
   - itemA: {fileID: 11400000, guid: 3195eb4eec5d0ad4d9b50c9b7e21ff8d, type: 2}
     itemB: {fileID: 11400000, guid: 1ec3b9a8117994b499e8626d68816746, type: 2}
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

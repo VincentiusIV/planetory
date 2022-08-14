@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class StartMenu : MonoBehaviour
 {
-
+    public bool deletePlayerPrefs;
     public Button playButton, levelsButton, quitButton, backToStart;
     public GameObject mainButtonRoot, levelSelectRoot;
     public LevelSelectButton[] levelSelectButtons;
@@ -14,6 +14,10 @@ public class StartMenu : MonoBehaviour
 
     private void Awake()
     {
+#if UNITY_EDITOR
+        if (deletePlayerPrefs)
+            PlayerPrefs.DeleteAll();
+#endif
         levelSelectRoot.SetActive(false);
         playButton.onClick.AddListener(OnPlayClick);
         levelsButton.onClick.AddListener(OnLevelSelectClick);

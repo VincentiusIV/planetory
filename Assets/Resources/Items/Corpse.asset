@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
   m_Name: Corpse
   m_EditorClassIdentifier: 
-  Icon: {fileID: 2800000, guid: a12f35760a2e8c647a0d6184ff6c41d7, type: 3}
+  Icon: {fileID: 21300000, guid: a12f35760a2e8c647a0d6184ff6c41d7, type: 3}
   recipes: []
   HeatingResult: {fileID: 0}
   EnergizedResult: {fileID: 11400000, guid: b533897c68dec55469556b15b462670a, type: 2}

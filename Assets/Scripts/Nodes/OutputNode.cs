@@ -24,7 +24,7 @@ public class OutputNode : Node
         inputRail.OnCartAwaitingTransfer.AddListener(OnCartAwaitingTransfer);
         Debug.Assert(requiredItem != null, this);
         itemNameField.text = requiredItem.name;
-        itemIconRenderer.material.SetTexture("_BaseMap", requiredItem.Icon);
+        itemIconRenderer.material.SetTexture("_BaseMap", requiredItem.Icon.texture);
         RemainingItemsCount = needed;
         requiredField.text = "Req: " + RemainingItemsCount;
     }

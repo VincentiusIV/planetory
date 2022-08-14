@@ -8,7 +8,7 @@ public static class CreateItemsTool
     [MenuItem("Factory/CreateItems")]
     public static void CreateItemsFromPNGs()
     {
-        Texture[] icons = Resources.LoadAll<Texture>("Icons");
+        Sprite[] icons = Resources.LoadAll<Sprite>("Icons");
         Item[] items = Resources.LoadAll<Item>("Items");
         Dictionary<string, Item> nameToItems = new Dictionary<string, Item>();
         foreach (var item in items)
@@ -18,7 +18,13 @@ public static class CreateItemsTool
         {
             string name = icon.name.Split('_')[0];
             if (nameToItems.ContainsKey(name))
+            {
+                Item item = AssetDatabase.LoadAssetAtPath<Item>($"Assets/Resources/Items/{name}.asset");
+                Debug.Assert(item != null);
+                item.Icon = icon;
+                EditorUtility.SetDirty(item);
                 continue;
+            }
 
             Item newItem = ScriptableObject.CreateInstance<Item>();
             newItem.name = name;

@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
   m_Name: Eruption
   m_EditorClassIdentifier: 
-  Icon: {fileID: 2800000, guid: 65a0c4fa01fa22743a15b2b44b2a8c6f, type: 3}
+  Icon: {fileID: 21300000, guid: 65a0c4fa01fa22743a15b2b44b2a8c6f, type: 3}
   recipes: []
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

@@ -25,7 +25,7 @@ public class ResourceNode : Node
     private void Start()
     {
         itemNameField.text = outputItem.name;
-        itemIconRenderer.material.SetTexture("_BaseMap", outputItem.Icon);
+        itemIconRenderer.material.SetTexture("_BaseMap", outputItem.Icon.texture);
     }
 
     private void FixedUpdate()

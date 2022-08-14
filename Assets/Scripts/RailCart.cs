@@ -49,7 +49,7 @@ public class RailCart : MonoBehaviour
     {
         Debug.Assert(Content == null);
         Content = item;
-        itemIconRenderer.material.SetTexture("_BaseMap", item.Icon);
+        itemIconRenderer.material.SetTexture("_BaseMap", item.Icon.texture);
     }
 
     private void Update()

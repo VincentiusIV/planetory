@@ -11,7 +11,7 @@ public struct CombineRecipe
 [CreateAssetMenu(menuName = "Factory/Item")]
 public class Item : ScriptableObject
 {
-    public Texture Icon;
+    public Sprite Icon;
 
     public CombineRecipe[] recipes;
 

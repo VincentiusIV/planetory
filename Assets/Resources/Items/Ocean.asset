@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
   m_Name: Ocean
   m_EditorClassIdentifier: 
-  Icon: {fileID: 2800000, guid: ed9a6ef2f32d2164cb5a254de09ee0b5, type: 3}
+  Icon: {fileID: 21300000, guid: ed9a6ef2f32d2164cb5a254de09ee0b5, type: 3}
   recipes:
   - itemA: {fileID: 11400000, guid: c24243ebe5d7780409f82903e696f758, type: 2}
     itemB: {fileID: 11400000, guid: c24243ebe5d7780409f82903e696f758, type: 2}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
   m_Name: Earthquake
   m_EditorClassIdentifier: 
-  Icon: {fileID: 2800000, guid: 398ab9e98aafe1b4cb35b538be36f11e, type: 3}
+  Icon: {fileID: 21300000, guid: 398ab9e98aafe1b4cb35b538be36f11e, type: 3}
   recipes: []
   HeatingResult: {fileID: 0}
   EnergizedResult: {fileID: 0}
