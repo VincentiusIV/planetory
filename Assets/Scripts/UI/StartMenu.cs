@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class StartMenu : MonoBehaviour
 {
 
-    public Button playButton, levelsButton, quitButton;
-    public GameObject levelSelectRoot;
+    public Button playButton, levelsButton, quitButton, backToStart;
+    public GameObject mainButtonRoot, levelSelectRoot;
     public LevelSelectButton[] levelSelectButtons;
     public Texture2D cursor;
 
@@ -18,11 +18,13 @@ public class StartMenu : MonoBehaviour
         playButton.onClick.AddListener(OnPlayClick);
         levelsButton.onClick.AddListener(OnLevelSelectClick);
         quitButton.onClick.AddListener(OnQuitClick);
+        backToStart.onClick.AddListener(OnBackToStartClick);
 
         for (int i = 0; i < levelSelectButtons.Length; i++)
             levelSelectButtons[i].Setup(i);
 
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
+        SwitchToMainButton();
 
     }
 
@@ -33,11 +35,28 @@ public class StartMenu : MonoBehaviour
 
     private void OnLevelSelectClick()
     {
-        levelSelectRoot.SetActive(!levelSelectRoot.activeSelf);
+        SwitchToLevelSelect();
     }
 
     private void OnPlayClick()
     {
         LevelManager.Play();
+    }
+
+    private void OnBackToStartClick()
+    {
+        SwitchToMainButton();
+    }
+
+    private void SwitchToLevelSelect()
+    {
+        levelSelectRoot.SetActive(true);
+        mainButtonRoot.SetActive(false);
+    }
+
+    private void SwitchToMainButton()
+    {
+        levelSelectRoot.SetActive(false);
+        mainButtonRoot.SetActive(true);
     }
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
+  m_Name: Plant
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 2800000, guid: 55704a39e85821548969f26f0eecd530, type: 3}
+  recipes:
+  - itemA: {fileID: 11400000, guid: f38482a9ded74e04594847c3aed99a4e, type: 2}
+    itemB: {fileID: 11400000, guid: b2bdd335f957c4543a86f3edfdac44fe, type: 2}
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

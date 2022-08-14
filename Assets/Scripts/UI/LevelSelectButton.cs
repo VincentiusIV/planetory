@@ -15,7 +15,6 @@ public class LevelSelectButton : MonoBehaviour
     private void Awake()
     {
         GetComponent<Button>().onClick.AddListener(OnClick);
-        LevelManager.MarkLevelComplete(3);
     }
 
     public void Setup(int levelIndex)

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : Singleton<LevelManager>
@@ -9,11 +11,24 @@ public class LevelManager : Singleton<LevelManager>
     public static string IS_LEVEL_COMPLETE = "IsLevelComplete{0}";
     public string menuName = "StartMenu";
     public string[] levelNames;
+    private static int currentLevelIndex;
 
     protected override void Awake()
     {
         base.Awake();
         DontDestroyOnLoad(gameObject);
+
+        string currentLevelName = SceneManager.GetActiveScene().name;
+        for (int i = 0; i < levelNames.Length; i++)
+        {
+            if(levelNames[i] == currentLevelName)
+            {
+                currentLevelIndex = i;
+                Debug.Log($"Current level index: {currentLevelIndex}");
+                PlayerPrefs.SetInt(LAST_LEVEL_INDEX, currentLevelIndex);
+                break;
+            }
+        }
     }
 
     public static void Play()
@@ -26,7 +41,7 @@ public class LevelManager : Singleton<LevelManager>
 
     public static void PlayNext()
     {
-        int nextIndex = PlayerPrefs.GetInt(LAST_LEVEL_INDEX) + 1;
+        int nextIndex = currentLevelIndex + 1;
         if(nextIndex >= Instance.levelNames.Length)
         {
             nextIndex = 0;
@@ -52,6 +67,11 @@ public class LevelManager : Singleton<LevelManager>
     {
         SceneManager.LoadScene(Instance.menuName);
         MusicSystem.Instance.ChooseNextTrack();
+    }
+
+    public static void MarkLevelComplete()
+    {
+        MarkLevelComplete(currentLevelIndex);
     }
 
     public static void MarkLevelComplete(int index)

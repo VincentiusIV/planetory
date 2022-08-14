@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
+  m_Name: Mars
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 2800000, guid: cd7762a6b19c8754ba159e8275d666bc, type: 3}
+  recipes:
+  - itemA: {fileID: 11400000, guid: 507a49c8d6aacd64bb62a6b2fa6e403f, type: 2}
+    itemB: {fileID: 11400000, guid: 64b6e9d27add31f429e967f44e31b708, type: 2}
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

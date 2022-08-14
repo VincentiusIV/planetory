@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Life
   m_EditorClassIdentifier: 
   Icon: {fileID: 2800000, guid: ccd527d61d068334a97ba65e7ab7cf62, type: 3}
-  recipes: []
+  recipes:
+  - itemA: {fileID: 11400000, guid: 1ec3b9a8117994b499e8626d68816746, type: 2}
+    itemB: {fileID: 11400000, guid: 44165047d3ecb7d4892b7a5ae26bf571, type: 2}
   HeatingResult: {fileID: 0}
   EnergizedResult: {fileID: 0}

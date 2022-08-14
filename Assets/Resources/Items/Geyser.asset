@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: Geyser
   m_EditorClassIdentifier: 
   Icon: {fileID: 2800000, guid: 9ff5a181f4caf0f4ea7efc933c1034f8, type: 3}
-  recipes: []
+  recipes:
+  - itemA: {fileID: 11400000, guid: 05ced7d89d62f44478ffc629b64077ff, type: 2}
+    itemB: {fileID: 11400000, guid: 7d6ffa13f542ce44fb7387b50fe22c2a, type: 2}
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

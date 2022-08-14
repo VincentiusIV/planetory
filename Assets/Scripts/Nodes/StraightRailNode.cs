@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public abstract class RailNode : Node
     public int endpointTriggerIndex = 0;
     protected RailCart AwaitingCart;
     private List<RailCart> currentCarts = new List<RailCart>();
+    public RailCart GetCart() => currentCarts.FirstOrDefault();
     private int nextRailIdx = 0;
 
     public void OnCartEnter(RailCart cart)
@@ -114,10 +116,11 @@ public abstract class RailNode : Node
     {
         float thisYRot = ClampAngle(transform.eulerAngles.z, minRotation, maxRotation);
         float theirYRot = ClampAngle(node.transform.eulerAngles.z, minRotation, maxRotation);
+        RailNode railNode = node as RailNode;
+        if (railNode == null)
+            return false;
 
-        return !isEndpoint && allowCombinations && ((node as RailNode) != null && 
-            ((thisYRot != theirYRot) ||
-            (node.GetType() != GetType())));
+        return !isEndpoint && !railNode.isEndpoint && allowCombinations && (((thisYRot != theirYRot) || (node.GetType() != GetType())));
     }
 
     static float ClampAngle(float angle, float min, float max)

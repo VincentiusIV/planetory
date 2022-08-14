@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d579e8824b63f0343be9c27a5708a96e, type: 3}
+  m_Name: Cookie Dough
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 2800000, guid: faec7e000efee2b408941608922b14a6, type: 3}
+  recipes: []
+  HeatingResult: {fileID: 11400000, guid: e994e65402f1edb4b9d402bc5f60fa33, type: 2}
+  EnergizedResult: {fileID: 0}

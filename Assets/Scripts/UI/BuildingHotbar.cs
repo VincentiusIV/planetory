@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BuildingHotbar : MonoBehaviour
 {
+    public GameObject visualRoot;
     public BuildingButton[] buildingButtons;
 
     private void Start()
@@ -18,6 +19,12 @@ public class BuildingHotbar : MonoBehaviour
                 buildingButtons[i].Setup(resources[i]);
             }
         }
+    }
+
+    private void Update()
+    {
+        if(Builder.Instance.IsEnabled != visualRoot.activeSelf)
+            visualRoot.SetActive(Builder.Instance.IsEnabled);        
     }
 
     public void SwitchDemolitionMode()

@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using TMPro;
 
 public class OutputNode : Node
 {
     public int RemainingItemsCount { get; private set; }
+    public UnityEvent OnReceivedItem;
     public bool IsSatisfied => RemainingItemsCount <= 0;
     public Item requiredItem;
-    public int needed = 5;
+    public int needed = 1;
 
-    public TMP_Text itemNameField;
+    public TMP_Text itemNameField, requiredField;
     public MeshRenderer itemIconRenderer;
 
     public RailNode inputRail;
@@ -20,9 +22,11 @@ public class OutputNode : Node
     {
         base.Awake();
         inputRail.OnCartAwaitingTransfer.AddListener(OnCartAwaitingTransfer);
-
+        Debug.Assert(requiredItem != null, this);
         itemNameField.text = requiredItem.name;
         itemIconRenderer.material.SetTexture("_BaseMap", requiredItem.Icon);
+        RemainingItemsCount = needed;
+        requiredField.text = "Req: " + RemainingItemsCount;
     }
 
     private void Start()
@@ -36,6 +40,9 @@ public class OutputNode : Node
         if (cart.Content == requiredItem)
         {
             --RemainingItemsCount;
+            RemainingItemsCount = Math.Max(0, RemainingItemsCount);
+            requiredField.text = "Req: " + RemainingItemsCount;
+            OnReceivedItem.Invoke();
             cart.Kill();
         }
         else

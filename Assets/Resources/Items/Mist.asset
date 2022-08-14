@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: Mist
   m_EditorClassIdentifier: 
   Icon: {fileID: 2800000, guid: 34d9d6f033e226b47ae072b747fc3dd9, type: 3}
-  recipes: []
+  recipes:
+  - itemA: {fileID: 11400000, guid: 1ec3b9a8117994b499e8626d68816746, type: 2}
+    itemB: {fileID: 11400000, guid: 0a1e44fd2825c6043a7d9921dcd36074, type: 2}
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

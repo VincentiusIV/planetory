@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: Plankton
   m_EditorClassIdentifier: 
   Icon: {fileID: 2800000, guid: 2a07fad7ba30c8a42b626152ae75f85b, type: 3}
-  recipes: []
+  recipes:
+  - itemA: {fileID: 11400000, guid: 1ec3b9a8117994b499e8626d68816746, type: 2}
+    itemB: {fileID: 11400000, guid: b2bdd335f957c4543a86f3edfdac44fe, type: 2}
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

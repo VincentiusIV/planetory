@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: Planet
   m_EditorClassIdentifier: 
   Icon: {fileID: 2800000, guid: e44ad65585a90d94b9b03a6be86b0480, type: 3}
-  recipes: []
+  recipes:
+  - itemA: {fileID: 11400000, guid: c79c474bbac08a64abc834f28a47ff14, type: 2}
+    itemB: {fileID: 11400000, guid: 1a04b03f1fd534745ad61c743e0da6f4, type: 2}
+  HeatingResult: {fileID: 0}
+  EnergizedResult: {fileID: 0}

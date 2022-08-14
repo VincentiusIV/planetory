@@ -40,6 +40,7 @@ public abstract class BuildHandler
 public class Builder : Singleton<Builder>
 {
     public bool IsInDemolitionMode { get; private set; }
+    public bool IsEnabled { get; private set; } = true;
     public NodeSlot SelectedSlot { get; private set; }
     public Vector3 SelectionPosition { get; private set; }
     public BuildResource[] resources;
@@ -51,8 +52,16 @@ public class Builder : Singleton<Builder>
 
     private BuildHandler activeBuildHandler;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.ForceSoftware);
+    }
+
     private void Update()
     {
+        if (!IsEnabled)
+            return;
         UpdateSelectedSlot();
 
         activeBuildHandler?.Update();
@@ -155,5 +164,17 @@ public class Builder : Singleton<Builder>
     {
         IsInDemolitionMode = false;
         Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.ForceSoftware);
+    }
+
+    public void Disable()
+    {
+        IsEnabled = false;
+        activeBuildHandler?.CancelBuild();
+        StopDemolition();
+    }
+
+    internal void Enable()
+    {
+        IsEnabled = true;
     }
 }
